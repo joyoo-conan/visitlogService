@@ -2,9 +2,11 @@ package com.codepulse.visitlogService.Repository;
 
 import com.codepulse.visitlogService.model.TbVisitLog;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface VisitLogRepository extends JpaRepository<TbVisitLog, Long> {
     //The visit log record
     TbVisitLog save(TbVisitLog visitLog);

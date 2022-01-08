@@ -1,24 +1,24 @@
-package com.codepulse.visitlogService.Repository;
+package com.codepulse.visitlogService.repository;
 
-import com.codepulse.visitlogService.Entity.Client;
+import com.codepulse.visitlogService.model.TbClientMst;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, String> {
+public interface ClientMstRepository extends JpaRepository<TbClientMst, String> {
     //Get a list of all clients
-    List<Client> findAll();
+    List<TbClientMst> findAll();
 
     //Get a list of use_yn enable clients
-    List<Client> findByUseYn(int useYn);
+    List<TbClientMst> findByUseYn(int useYn);
 
     //Get the specified client information
-    Client findByCltCd(String cltCd);
+    TbClientMst findByCltCd(String cltCd);
 
     //Store shop information
-    Client save(Client client);
+    TbClientMst save(TbClientMst clientMst);
 
     //Delete the specified client information
     @Override

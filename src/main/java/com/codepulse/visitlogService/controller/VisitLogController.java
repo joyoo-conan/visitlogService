@@ -2,9 +2,10 @@ package com.codepulse.visitlogService.Controller;
 
 import com.codepulse.visitlogService.Common.AES256Chiper;
 import com.codepulse.visitlogService.Common.CommLib;
-import com.codepulse.visitlogService.Entity.Response;
-import com.codepulse.visitlogService.Entity.VisitLog;
 import com.codepulse.visitlogService.Service.VisitLogService;
+import com.codepulse.visitlogService.dto.VisitLogDto;
+import com.codepulse.visitlogService.model.Response;
+import com.codepulse.visitlogService.model.TbVisitLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class VisitLogController {
             System.out.println("reqData:" + reqData);
 
             ObjectMapper objectMapper = new ObjectMapper();
-            VisitLog visitLog = objectMapper.readValue(reqData, VisitLog.class);
+            TbVisitLog visitLog = objectMapper.readValue(reqData, TbVisitLog.class);
             visitLog.setVisitDate(ymd);
             visitLog.setVisitTime(hh24);
             visitLog = visitLogService.recordVisitLog(visitLog);
@@ -82,11 +84,25 @@ public class VisitLogController {
             logger.info(String.format("get - visitlog/v1/view?cltCd=%s&visitDate=%s", cltCd, visitDate));
 
             ObjectMapper objectMapper = new ObjectMapper();
-            List<VisitLog> visitLogs = visitLogService.getByCltCdAndVisitDate(cltCd, visitDate);
+            List<TbVisitLog> visitLogs = visitLogService.getByCltCdAndVisitDate(cltCd, visitDate);
+
+            List<VisitLogDto> visitLogDtos = visitLogs.stream().map(visitLog ->{
+                return new VisitLogDto(
+                        visitLog.getId(),
+                        visitLog.getCltCd(),
+                        visitLog.getMobile(),
+                        visitLog.getVisitNm(),
+                        visitLog.getManager(),
+                        visitLog.getVisitClt(),
+                        visitLog.getVisitReason(),
+                        visitLog.getLocation(),
+                        visitLog.getPrivacyAgree(),
+                        visitLog.getVisitDate(),
+                        visitLog.getVisitTime());
+            }).collect(Collectors.toList());
 
             AES256Chiper aes256Chiper = AES256Chiper.getInstance();
-
-            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(visitLogs));
+            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(visitLogDtos));
 
             response.setData(resData);
             response.setTime(ymd + hh24);
@@ -118,10 +134,25 @@ public class VisitLogController {
             logger.info(String.format("get - visitlog/v2/view?cltCd=%s&start=%s&end=%s", cltCd, start, end));
 
             ObjectMapper objectMapper = new ObjectMapper();
-            List<VisitLog> visitLogs = visitLogService.getByCltCdAndVisitDateBetween(cltCd, start, end);
+            List<TbVisitLog> visitLogs = visitLogService.getByCltCdAndVisitDateBetween(cltCd, start, end);
+
+            List<VisitLogDto> visitLogDtos = visitLogs.stream().map(visitLog ->{
+                return new VisitLogDto(
+                        visitLog.getId(),
+                        visitLog.getCltCd(),
+                        visitLog.getMobile(),
+                        visitLog.getVisitNm(),
+                        visitLog.getManager(),
+                        visitLog.getVisitClt(),
+                        visitLog.getVisitReason(),
+                        visitLog.getLocation(),
+                        visitLog.getPrivacyAgree(),
+                        visitLog.getVisitDate(),
+                        visitLog.getVisitTime());
+            }).collect(Collectors.toList());
 
             AES256Chiper aes256Chiper = AES256Chiper.getInstance();
-            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(visitLogs));
+            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(visitLogDtos));
 
             response.setData(resData);
             response.setTime(ymd + hh24);

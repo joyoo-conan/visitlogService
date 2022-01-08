@@ -1,5 +1,11 @@
 package com.codepulse.visitlogService.dto;
 
+import lombok.*;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class VisitLogDto {
     private Long Id;
 

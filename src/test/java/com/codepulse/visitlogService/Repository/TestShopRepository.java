@@ -1,6 +1,7 @@
 package com.codepulse.visitlogService.Repository;
 
-import com.codepulse.visitlogService.Entity.Client;
+import com.codepulse.visitlogService.model.TbClientMst;
+import com.codepulse.visitlogService.repository.ClientMstRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -18,11 +19,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestShopRepository {
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientMstRepository clientRepository;
 
     @Test
     public void AddShop(String cltCd, String cltNm, String ceo, String tel, String email, String bizCd) {
-        Client client = new Client();
+        TbClientMst client = new TbClientMst();
 
         client.setCltCd(cltCd);
         client.setCltNm(cltNm);
@@ -35,7 +36,7 @@ public class TestShopRepository {
     }
 
     @Test
-    public Client GetClient(String cltCd) {
+    public TbClientMst GetClient(String cltCd) {
         boolean isResult = clientRepository.findById(cltCd).isPresent();
 
         /*

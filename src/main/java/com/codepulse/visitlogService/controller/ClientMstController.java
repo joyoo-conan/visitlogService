@@ -1,10 +1,10 @@
-package com.codepulse.visitlogService.Controller;
+package com.codepulse.visitlogService.controller;
 
 import com.codepulse.visitlogService.Common.AES256Chiper;
 import com.codepulse.visitlogService.Common.CommLib;
-import com.codepulse.visitlogService.Entity.Client;
-import com.codepulse.visitlogService.Entity.Response;
-import com.codepulse.visitlogService.Service.ClientService;
+import com.codepulse.visitlogService.model.Response;
+import com.codepulse.visitlogService.model.TbClientMst;
+import com.codepulse.visitlogService.service.ClientMstService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/clients", produces = {MediaType.APPLICATION_JSON_VALUE})
-public class ClientController {
-    private final ClientService clientService;
-    private Logger logger = LoggerFactory.getLogger(ClientController.class);
+@RequestMapping(value = "/client", produces = {MediaType.APPLICATION_JSON_VALUE})
+public class ClientMstController {
+    private final ClientMstService clientMstService;
+    private Logger logger = LoggerFactory.getLogger(ClientMstController.class);
 
     //http://localhost:8080/clients/v1/all
     @GetMapping("/v1/all")
@@ -41,11 +41,11 @@ public class ClientController {
             logger.info(String.format("get - client/all"));
 
             ObjectMapper objectMapper = new ObjectMapper();
-            List<Client> clients = clientService.getAllClient();
+            List<TbClientMst> clientMsts = clientMstService.getAllClient();
 
             //Response data encrypted with AES256
-            AES256Chiper aes256Chiper = AES256Chiper.getInstance();
-            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(clients));
+            com.codepulse.visitlogService.Common.AES256Chiper aes256Chiper = com.codepulse.visitlogService.Common.AES256Chiper.getInstance();
+            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(clientMsts));
 
             response.setData(resData);
             response.setTime(ymd + hh24);
@@ -75,11 +75,11 @@ public class ClientController {
             logger.info(String.format("get - client/%s", cltCd));
 
             ObjectMapper objectMapper = new ObjectMapper();
-            Client client = clientService.getClientById(cltCd);
+            TbClientMst clientMst = clientMstService.getClientById(cltCd);
 
             //Response data encrypted with AES256
             AES256Chiper aes256Chiper = AES256Chiper.getInstance();
-            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(client));
+            String resData = aes256Chiper.encrypt(aes256Chiper.getKey(ymd, hh24), objectMapper.writeValueAsString(clientMst));
 
             response.setData(resData);
             response.setTime(ymd + hh24);
@@ -112,10 +112,10 @@ public class ClientController {
 
             String reqData = aes256Chiper.decrypt(aes256Chiper.getKey(ymd, hh24), req);
             ObjectMapper objectMapper = new ObjectMapper();
-            Client client = objectMapper.readValue(reqData, Client.class);
-            client = clientService.addClient(client);
+            TbClientMst clientMst = objectMapper.readValue(reqData, TbClientMst.class);
+            clientMst = clientMstService.addClient(clientMst);
 
-            logger.info(String.format("put - client/%s [reqData:%s]", client.getCltCd(), reqData));
+            logger.info(String.format("put - client/%s [reqData:%s]", clientMst.getCltCd(), reqData));
 
             response.setData("OK");
             response.setTime(ymd + hh24);
@@ -148,21 +148,21 @@ public class ClientController {
 
             String reqData = aes256Chiper.decrypt(aes256Chiper.getKey(ymd, hh24), req);
             ObjectMapper objectMapper = new ObjectMapper();
-            Client newClient = objectMapper.readValue(reqData, Client.class);
+            TbClientMst newClientMst = objectMapper.readValue(reqData, TbClientMst.class);
 
-            logger.info(String.format("post - clients/v1/modify? [cltCd=%s, reqData:%s]", newClient.getCltCd(), reqData));
+            logger.info(String.format("post - clients/v1/modify? [cltCd=%s, reqData:%s]", newClientMst.getCltCd(), reqData));
 
-            Client client = clientService.getClientById(newClient.getCltCd());
-            if (client == null) {
+            TbClientMst clientMst = clientMstService.getClientById(newClientMst.getCltCd());
+            if (clientMst == null) {
                 throw new Exception("Client information does not exist.");
             }
-            client.setCltNm(newClient.getCltNm());
-            client.setCeo(newClient.getCeo());
-            client.setTel(newClient.getTel());
-            client.setEmail(newClient.getEmail());
-            client.setBizCd(newClient.getBizCd());
-            client.setUseYn(newClient.getUseYn());
-            client = clientService.addClient(client);
+            clientMst.setCltNm(newClientMst.getCltNm());
+            clientMst.setCeo(newClientMst.getCeo());
+            clientMst.setTel(newClientMst.getTel());
+            clientMst.setEmail(newClientMst.getEmail());
+            clientMst.setBizCd(newClientMst.getBizCd());
+            clientMst.setUseYn(newClientMst.getUseYn());
+            clientMst = clientMstService.addClient(newClientMst);
 
             response.setData("OK");
             response.setTime(ymd + hh24);
@@ -191,7 +191,7 @@ public class ClientController {
         try {
             logger.info(String.format("delete - clients/v1/delete? [cltCd:%s]", cltCd));
 
-            clientService.removeClientById(cltCd);
+            clientMstService.removeClientById(cltCd);
 
             response.setData("OK");
             response.setTime(ymd + hh24);
