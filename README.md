@@ -1,2 +1,3 @@
 # visitlogService
-방명록 등록 BackEnd 서비스
+This repository is an example of BackEnd that stores the history of visits.
+Samples are written in springboot and java and use gradle for build definitions.
