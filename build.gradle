@@ -40,6 +40,11 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	/**
+	 * ETC
+	 */
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.0.0'     // model mapper
 }
 
 test {
