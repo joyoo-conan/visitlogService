@@ -40,6 +40,12 @@ public enum ErrorMessage {
     /**
      * 500 Internal server error
      */
+    NOT_READY_SERVER(50010, "error.server.not.ready"),
+    INTERNAL_SERVER_ERROR(50011, "internal.server.error"),
+
+    /**
+     * Exception
+     */
     ;
 
     private int code;

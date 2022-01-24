@@ -1,4 +1,4 @@
-package com.codepulse.visitlogService.Common;
+package com.codepulse.visitlogService.common;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.tomcat.util.codec.binary.Base64;

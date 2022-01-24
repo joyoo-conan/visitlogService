@@ -1,7 +1,7 @@
 package com.codepulse.visitlogService.Repository;
 
-import com.codepulse.visitlogService.model.TbClientMst;
-import com.codepulse.visitlogService.repository.ClientMstRepository;
+import com.codepulse.visitlogService.restful.model.Client;
+import com.codepulse.visitlogService.restful.repository.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -19,32 +19,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestShopRepository {
     @Autowired
-    private ClientMstRepository clientRepository;
+    private ClientRepository clientRepository;
 
+
+    /**
     @Test
-    public void AddShop(String cltCd, String cltNm, String ceo, String tel, String email, String bizCd) {
-        TbClientMst client = new TbClientMst();
-
-        client.setCltCd(cltCd);
-        client.setCltNm(cltNm);
-        client.setCeo(ceo);
-        client.setTel(tel);
-        client.setEmail(email);
-        client.setBizCd(bizCd);
-
-        clientRepository.save(client);
-    }
-
-    @Test
-    public TbClientMst GetClient(String cltCd) {
+    public Client GetClient(String cltCd) {
         boolean isResult = clientRepository.findById(cltCd).isPresent();
 
-        /*
-        if (!isResult) {
-            log.error(cltCd + " not found data");
-            return null;
-        }
-        */
         return clientRepository.findByCltCd(cltCd);
     }
+    */
 }

@@ -1,4 +1,4 @@
-package com.codepulse.visitlogService.Common;
+package com.codepulse.visitlogService.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
