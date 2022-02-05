@@ -34,24 +34,31 @@ public class VisitLog {
     private String mobile;
 
     @Column(name = "visit_nm", nullable = false, length = 120)
+    @Schema(description = "방문자명")
     private String visitNm;
 
     @Column(name = "manager", nullable = false, length = 120)
+    @Schema(description = "담당자")
     private String manager;
 
     @Column(name = "visit_clt", nullable = false, length = 120)
+    @Schema(description = "방문업체")
     private String visitClt;
 
     @Column(name = "visitReason", nullable = false, length = 120)
+    @Schema(description = "방문사유")
     private String visitReason;
 
     @Column(name = "location", nullable = false, length = 120)
+    @Schema(description = "지역")
     private String location;
 
     @Column(name = "privacy_agree", nullable = false)
+    @Schema(description = "개인정보 제공 허용여부(0:허용안함, 1:허용)")
     private int privacyAgree;
 
     @Column(name = "visit_date", nullable = false, length = 8)
+    @Schema(description = "방문날짜(yyyyMMdd)")
     private String visitDate;
 
     @Column(name = "visit_time", nullable = false, length = 8)

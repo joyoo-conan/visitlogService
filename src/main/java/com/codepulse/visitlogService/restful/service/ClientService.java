@@ -1,6 +1,8 @@
 package com.codepulse.visitlogService.restful.service;
 
 import com.codepulse.visitlogService.restful.dto.ClientDto;
+import com.codepulse.visitlogService.restful.dto.req.ClientReqDto;
+import com.codepulse.visitlogService.restful.dto.res.ClientResDto;
 import com.codepulse.visitlogService.restful.model.Client;
 import com.codepulse.visitlogService.restful.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,4 +36,13 @@ public class ClientService {
         return modelMapper.map(client, ClientDto.class);
     }
 
+    public ClientResDto regClient(ClientReqDto client) {
+        Client newClient = modelMapper.map(client, Client.class);
+        return modelMapper.map(clientRepository.save(newClient), ClientResDto.class);
+    }
+
+    public ClientResDto chgClient(ClientReqDto client) {
+        Client newClient = modelMapper.map(client, Client.class);
+        return modelMapper.map(clientRepository.save(newClient), ClientResDto.class);
+    }
 }
