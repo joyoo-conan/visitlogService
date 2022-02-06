@@ -31,6 +31,7 @@ import java.util.List;
 @Tag(name = "고객사(CLIENTS)", description = "고객사 과 사용자(유저, 유저 그룹, 롤) 관련 API")
 public class ClientController {
     private final ClientService clientService;
+    private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
 
     /**
@@ -114,24 +115,23 @@ public class ClientController {
         CommonResult commonResult;
 
         try {
-            String reqData = AES256Chiper.decrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, 8)), request.getReq());
-            ObjectMapper objectMapper = new ObjectMapper();
-            ClientReqDto client = objectMapper.readValue(reqData, ClientReqDto.class);
-            ClientResDto clientRes = clientService.regClient(client);
+            String reqData = AES256Chiper.decrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())), request.getReq());
+
+            ClientResDto clientResDto = clientService.regClient(objectMapper.readValue(reqData, ClientReqDto.class));
 
             commonResult = CommonResult.builder()
                     .success(true)
                     .code(0)
-                    .data(AES256Chiper.encrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, 8)), objectMapper.writeValueAsString(clientRes))) //CommonResponse data encrypted with AES256
-                    .time(String.format("%s%s", request.getTime().substring(0, 8), request.getTime().substring(8, 8)))
+                    .data(AES256Chiper.encrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())), objectMapper.writeValueAsString(clientResDto))) //CommonResponse data encrypted with AES256
+                    .time(String.format("%s%s", request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())))
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
 
             commonResult = CommonResult.builder()
                     .success(false)
-                    .code(ErrorMessage.NOT_READY_SERVER.getCode())
-                    .msg(ErrorMessage.NOT_READY_SERVER.getDescription())
+                    .code(e.hashCode())
+                    .msg(e.getMessage())
                     .build();
         }
         return commonResult;
@@ -147,20 +147,16 @@ public class ClientController {
         CommonResult commonResult;
 
         try {
-            String ymd = request.getTime().substring(0, 8);
-            String hh24 = request.getTime().substring(8, request.getTime().length());
-
             String reqData = AES256Chiper.decrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())), request.getReq());
-            ObjectMapper objectMapper = new ObjectMapper();
-            ClientReqDto reqClient = objectMapper.readValue(reqData, ClientReqDto.class);
-            ClientResDto resClient = clientService.chgClient(reqClient);
 
-            String test = new ObjectMapper().writeValueAsString(resClient);
+            ClientResDto clientResDto = clientService.chgClient(objectMapper.readValue(reqData, ClientReqDto.class));
+
+
 
             commonResult = CommonResult.builder()
                     .success(true)
                     .code(0)
-                    .data(AES256Chiper.encrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, 8)), objectMapper.writeValueAsString(resClient))) //CommonResponse data encrypted with AES256
+                    .data(AES256Chiper.encrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, 8)), objectMapper.writeValueAsString(clientResDto))) //CommonResponse data encrypted with AES256
                     .time(String.format("%s%s", request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())))
                     .build();
         } catch (Exception e) {
