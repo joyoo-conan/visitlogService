@@ -32,7 +32,6 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
     private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
 
     /**
      * 고객사 전체조회
@@ -150,8 +149,6 @@ public class ClientController {
             String reqData = AES256Chiper.decrypt(AES256Chiper.getKey(request.getTime().substring(0, 8), request.getTime().substring(8, request.getTime().length())), request.getReq());
 
             ClientResDto clientResDto = clientService.chgClient(objectMapper.readValue(reqData, ClientReqDto.class));
-
-
 
             commonResult = CommonResult.builder()
                     .success(true)
