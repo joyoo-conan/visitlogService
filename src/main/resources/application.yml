@@ -1,0 +1,147 @@
+
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
+  level:
+    org.hibernate.SQL: debug
+    #    org.hibernate.type: trace
+    org.springframework: off
+    root: off
+
+server:
+  port: 12000
+
+---
+# dev
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:log4jdbc:mysql://192.168.10.206:3306/visitlog_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&autoReconnect=true
+    username: codepulse
+    password: "jung@0083"
+    hikari:
+      pool-name: saria-hikari-cp
+      allow-pool-suspension: true
+      maximum-pool-size: 10 # (default 10)
+      idle-timeout: 300000 # 유휴 상태로 있을 수 있는 최대시간 제어. minimumIdle이 maximumPoolSize보다 작을 때 적용. (default 600000ms min 10000ms)
+      max-lifetime: 1800000 # 필수 옵션 (default 1800000ms)
+      connection-timeout: 10000 # 풀에서 커넥션을 얻는 대기시간. 초과 되면 exception 발생. (default 30000ms min 250ms)
+      validation-timeout: 10000 # 커넥션 유효 검사 대기 시간. connectionTimeout보다 작게 설정. (default 5000ms min 250ms)
+      data-source-properties: # mysql 성능 조정
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
+    generate-ddl: false
+  devtools:
+    livereload.enabled: true
+  jackson:
+    serialization:
+      fail-on-empty-beans : false
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
+
+  config:
+    activate:
+      on-profile: dev
+
+---
+
+
+---
+# local
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:log4jdbc:mysql://localhost:3306/visitlog_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&autoReconnect=true
+    username: codepulse
+    password: "jung@0083"
+    hikari:
+      pool-name: saria-hikari-cp
+      allow-pool-suspension: true
+      maximum-pool-size: 10 # (default 10)
+      idle-timeout: 300000 # 유휴 상태로 있을 수 있는 최대시간 제어. minimumIdle이 maximumPoolSize보다 작을 때 적용. (default 600000ms min 10000ms)
+      max-lifetime: 1800000 # 필수 옵션 (default 1800000ms)
+      connection-timeout: 10000 # 풀에서 커넥션을 얻는 대기시간. 초과 되면 exception 발생. (default 30000ms min 250ms)
+      validation-timeout: 10000 # 커넥션 유효 검사 대기 시간. connectionTimeout보다 작게 설정. (default 5000ms min 250ms)
+      data-source-properties: # mysql 성능 조정
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
+    generate-ddl: false
+  devtools:
+    livereload.enabled: true
+  jackson:
+    serialization:
+      fail-on-empty-beans : false
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
+  config:
+    activate:
+      on-profile: local
+
+---
+
+
+---
+# prod
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:log4jdbc:mysql://localhost:3306/visitlog_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&autoReconnect=true
+    username: codepulse
+    password: "jung@0083"
+    hikari:
+      pool-name: saria-hikari-cp
+      allow-pool-suspension: true
+      maximum-pool-size: 10 # (default 10)
+      idle-timeout: 300000 # 유휴 상태로 있을 수 있는 최대시간 제어. minimumIdle이 maximumPoolSize보다 작을 때 적용. (default 600000ms min 10000ms)
+      max-lifetime: 1800000 # 필수 옵션 (default 1800000ms)
+      connection-timeout: 10000 # 풀에서 커넥션을 얻는 대기시간. 초과 되면 exception 발생. (default 30000ms min 250ms)
+      validation-timeout: 10000 # 커넥션 유효 검사 대기 시간. connectionTimeout보다 작게 설정. (default 5000ms min 250ms)
+      data-source-properties: # mysql 성능 조정
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
+    generate-ddl: false
+  devtools:
+    livereload.enabled: true
+  jackson:
+    serialization:
+      fail-on-empty-beans : false
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
+
+  config:
+    activate:
+      on-profile: prod
+
+---

@@ -19,6 +19,10 @@ configurations {
 	}
 }
 
+bootRun {
+	systemProperties System.properties
+}
+
 repositories {
 	mavenCentral()
 }
@@ -41,6 +45,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	/**
+	 * Security
+	 */
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	implementation  group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	implementation  group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	/**
 	 * Database
 	 */
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -53,6 +65,13 @@ dependencies {
 	annotationProcessor("jakarta.annotation:jakarta.annotation-api")    // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
 
 	/**
+	 * ehcache
+	 */
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.3.3.RELEASE'
+	implementation group: 'org.ehcache', name: 'ehcache', version: '3.8.1'
+	implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
+
+	/**
 	 * ETC
 	 */
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.0.0'     // model mapper
@@ -63,4 +82,9 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+/** clean 태스크 실행시 QClass 삭제 */
+clean {
+	delete file('src/main/generated') // intelliJ Annotation processor 생성물 생성 위치
 }
